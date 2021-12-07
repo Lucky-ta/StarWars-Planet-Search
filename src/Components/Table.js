@@ -2,8 +2,29 @@ import React, { useContext } from 'react';
 import MyContext from '../context/MyContext';
 
 function Table() {
-  const { data } = useContext(MyContext);
+  const {
+    data,
+    numericFilter: { filterByNumericValues: numericValues },
+  } = useContext(MyContext);
+
   const { planetName: { filterByName: { name } } } = useContext(MyContext);
+
+  const filteredPlanets = data.filter((info) => {
+    const filteredArr = numericValues.filter((planet) => {
+      if (planet.comparison === 'maior que') {
+        return Number(info[planet.column]) > Number(planet.value);
+      }
+      if (planet.comparison === 'menor que') {
+        return Number(info[planet.column]) < Number(planet.value);
+      }
+      if (planet.comparison === 'igual a') {
+        return Number(info[planet.column]) === Number(planet.value);
+      }
+    });
+
+    return info.name.toLowerCase().includes(name)
+    && numericValues.length === filteredArr.length;
+  });
 
   return (
     <div>
@@ -17,7 +38,7 @@ function Table() {
             </tr>
           </thead>
           <tbody>
-            {data.filter((info) => info.name.toLowerCase().includes(name))
+            {filteredPlanets
               .map((planetInfo, planetIndex) => (
                 <tr key={ planetIndex }>
                   {Object.values(planetInfo).map((planetsValues, planetsIndex) => (

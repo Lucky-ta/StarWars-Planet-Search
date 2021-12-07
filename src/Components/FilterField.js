@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 
 import MyContext from '../context/MyContext';
+import FilterNumericValues from './FilterNumericValues';
 
 function FilterField() {
   const { planetName, setPlanetName } = useContext(MyContext);
@@ -14,6 +15,7 @@ function FilterField() {
           { ...planetName, filterByName: { name: target.value } },
         ) }
       />
+      <FilterNumericValues />
     </div>
   );
 }
