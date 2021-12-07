@@ -9,18 +9,20 @@ function Table() {
 
   const { planetName: { filterByName: { name } } } = useContext(MyContext);
 
+  function numericFilter(info, planet) {
+    if (planet.comparison === 'maior que') {
+      return Number(info[planet.column]) > Number(planet.value);
+    }
+    if (planet.comparison === 'menor que') {
+      return Number(info[planet.column]) < Number(planet.value);
+    }
+    if (planet.comparison === 'igual a') {
+      return Number(info[planet.column]) === Number(planet.value);
+    }
+  }
+
   const filteredPlanets = data.filter((info) => {
-    const filteredArr = numericValues.filter((planet) => {
-      if (planet.comparison === 'maior que') {
-        return Number(info[planet.column]) > Number(planet.value);
-      }
-      if (planet.comparison === 'menor que') {
-        return Number(info[planet.column]) < Number(planet.value);
-      }
-      if (planet.comparison === 'igual a') {
-        return Number(info[planet.column]) === Number(planet.value);
-      }
-    });
+    const filteredArr = numericValues.filter((planet) => numericFilter(info, planet));
 
     return info.name.toLowerCase().includes(name)
     && numericValues.length === filteredArr.length;
