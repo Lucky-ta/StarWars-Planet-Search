@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import MyContext from '../context/MyContext';
 
-const dropDownOption = [
+export const dropDownOption = [
   'population',
   'orbital_period',
   'diameter',
@@ -23,6 +23,18 @@ const INITIAL_STATE = {
 
 function FilterNumericValues() {
   const [state, setState] = useState(INITIAL_STATE);
+  const { numericFilter, setNumericFilter } = useContext(MyContext);
+  const [optionList, setOptionList] = useState(dropDownOption);
+
+  function removeOption() {
+    const index = optionList.indexOf(state.column);
+    const filteredList = optionList.filter((option) => option !== state.column);
+    setOptionList(filteredList);
+    setState({
+      ...state,
+      column: filteredList[index < filteredList.length ? index : 0],
+    });
+  }
 
   function handleChange({ target }) {
     setState({
@@ -30,8 +42,6 @@ function FilterNumericValues() {
       [target.name]: target.value,
     });
   }
-
-  const { numericFilter, setNumericFilter } = useContext(MyContext);
 
   function sendFilters() {
     setNumericFilter({
@@ -47,7 +57,7 @@ function FilterNumericValues() {
         onChange={ handleChange }
         data-testid="column-filter"
       >
-        {dropDownOption.map((option, optionIndex) => (
+        {optionList.map((option, optionIndex) => (
           <option
             key={ optionIndex }
           >
@@ -72,7 +82,7 @@ function FilterNumericValues() {
         value={ state.value }
       />
       <button
-        onClick={ sendFilters }
+        onClick={ () => { sendFilters(); removeOption(); } }
         data-testid="button-filter"
         type="button"
       >
