@@ -19,3 +19,4 @@ npm install
 npm start
 ```
 ou entre no link abaixo para visualizar o projeto funcionando:
+https://star-wars-planet-search-5maacvjhq-lucky-ta.vercel.app/
